@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 from flask import Flask, jsonify
 from tinydb import TinyDB, Query
-from queue.filaPedido import FilaPedidos
+from filas.filaPedido import FilaPedidos
 
 app = Flask(__name__)
 
