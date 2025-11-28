@@ -1,15 +1,24 @@
 # functions/processaPedido.py
+import sys
+import os
 import uuid
 from datetime import datetime
 from flask import Flask, request, jsonify
 from tinydb import TinyDB, Query
+
+# Adiciona o diretório raiz ao path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from filas.filaPedido import FilaPedidos
 
 app = Flask(__name__)
 
-# Inicializa banco de dados e fila
-db_orders = TinyDB("db/orders.json")
-db_crypto = TinyDB("db/cadastroCriptomoeda.json")
+# Descobre o diretório raiz do projeto
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Inicializa banco de dados e fila com caminhos absolutos
+db_orders = TinyDB(os.path.join(project_root, "db", "orders.json"))
+db_crypto = TinyDB(os.path.join(project_root, "db", "cadastroCriptomoeda.json"))
 fila = FilaPedidos()
 
 Order = Query()
@@ -121,4 +130,4 @@ def listar_pedidos_usuario(user_id: str):
 
 
 if __name__ == "__main__":
-     app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000)

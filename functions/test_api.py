@@ -30,7 +30,7 @@ def test_criar_pedido():
         "user_id": "usuario123"
     }
     
-    response = requests.post(f"{PEDIDO_URL}/pedido", json=data)
+    response = requests.post(f"{'http://localhost:5000'}/pedido", json=data)
     print_response("Criação de Pedido", response)
     
     if response.status_code == 201:
@@ -42,7 +42,7 @@ def test_consultar_pedido(order_id):
     """Testa a consulta de um pedido"""
     print(f"\n🧪 TESTE 2: Consultar Pedido {order_id}")
     
-    response = requests.get(f"{PEDIDO_URL}/pedido/{order_id}")
+    response = requests.get(f"{'http://localhost:5000'}/pedido/{order_id}")
     print_response("Consulta de Pedido", response)
 
 
@@ -50,7 +50,7 @@ def test_processar_compra():
     """Testa o processamento de uma compra"""
     print("\n🧪 TESTE 3: Processar Compra da Fila")
     
-    response = requests.post(f"{COMPRA_URL}/processar-compra")
+    response = requests.post(f"{'http://localhost:5001'}/processar-compra")
     print_response("Processamento de Compra", response)
 
 
@@ -64,13 +64,13 @@ def test_pedido_quantidade_minima():
         "user_id": "usuario123"
     }
     
-    response = requests.post(f"{PEDIDO_URL}/pedido", json=data)
+    response = requests.post(f"{"http://localhost:5000"}/pedido", json=data)
     print_response("Pedido com Quantidade Mínima", response)
     
     # Processa para ver o erro
     if response.status_code == 201:
         time.sleep(0.5)
-        response2 = requests.post(f"{COMPRA_URL}/processar-compra")
+        response2 = requests.post(f"{'http://localhost:5001'}/processar-compra")
         print_response("Resultado do Processamento", response2)
 
 
@@ -84,13 +84,13 @@ def test_pedido_estoque_insuficiente():
         "user_id": "usuario123"
     }
     
-    response = requests.post(f"{PEDIDO_URL}/pedido", json=data)
+    response = requests.post(f"{"http://localhost:5000"}/pedido", json=data)
     print_response("Pedido com Estoque Insuficiente", response)
     
     # Processa para ver o erro
     if response.status_code == 201:
         time.sleep(0.5)
-        response2 = requests.post(f"{COMPRA_URL}/processar-compra")
+        response2 = requests.post(f"{"http://localhost:5001"}/processar-compra")
         print_response("Resultado do Processamento", response2)
 
 
@@ -107,7 +107,7 @@ def test_multiplos_pedidos():
     order_ids = []
     
     for pedido in pedidos:
-        response = requests.post(f"{PEDIDO_URL}/pedido", json=pedido)
+        response = requests.post(f"{'http://localhost:5001'}/pedido", json=pedido)
         if response.status_code == 201:
             order_id = response.json()["order_id"]
             order_ids.append(order_id)
@@ -118,7 +118,7 @@ def test_multiplos_pedidos():
     # Processa todos
     print("\n🔄 Processando toda a fila...")
     time.sleep(1)
-    response = requests.post(f"{COMPRA_URL}/processar-fila-completa")
+    response = requests.post(f"{"http://localhost:5001"}/processar-fila-completa")
     print_response("Processamento em Lote", response)
 
 
@@ -126,7 +126,7 @@ def test_listar_pedidos_usuario():
     """Testa listagem de pedidos de um usuário"""
     print("\n🧪 TESTE 7: Listar Pedidos do Usuário")
     
-    response = requests.get(f"{PEDIDO_URL}/pedidos/usuario/usuario123")
+    response = requests.get(f"{'http://localhost:5001'}/pedidos/usuario/usuario123")
     print_response("Pedidos do Usuário", response)
 
 

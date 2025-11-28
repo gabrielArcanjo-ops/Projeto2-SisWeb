@@ -1,16 +1,25 @@
 # functions/compraCripto.py
+import sys
+import os
 import uuid
 from datetime import datetime
 from flask import Flask, jsonify
 from tinydb import TinyDB, Query
+
+# Adiciona o diretório raiz ao path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from filas.filaPedido import FilaPedidos
 
 app = Flask(__name__)
 
-# Inicializa banco de dados e fila
-db_orders = TinyDB("db/orders.json")
-db_crypto = TinyDB("db/cadastroCriptomoeda.json")
-db_transactions = TinyDB("db/transactions.json")
+# Descobre o diretório raiz do projeto
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Inicializa banco de dados e fila com caminhos absolutos
+db_orders = TinyDB(os.path.join(project_root, "db", "orders.json"))
+db_crypto = TinyDB(os.path.join(project_root, "db", "cadastroCriptomoeda.json"))
+db_transactions = TinyDB(os.path.join(project_root, "db", "transactions.json"))
 fila = FilaPedidos()
 
 Order = Query()
